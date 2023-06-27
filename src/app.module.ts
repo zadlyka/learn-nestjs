@@ -5,6 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import typeorm from './config/typeorm';
+import { WrapInterceptor } from './interceptor/wrap.interceptor';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [typeorm] }),
@@ -17,6 +19,12 @@ import typeorm from './config/typeorm';
     UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: WrapInterceptor,
+    },
+    AppService,
+  ],
 })
 export class AppModule {}

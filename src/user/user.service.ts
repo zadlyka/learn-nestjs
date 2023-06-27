@@ -4,6 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { FilterOperator, PaginateQuery, paginate } from 'nestjs-paginate';
 
 @Injectable()
 export class UserService {
@@ -11,21 +12,32 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     const user = this.userRepository.create(createUserDto);
-    return this.userRepository.save(user);
+    await this.userRepository.save(user);
+    return this.findOne(user.id);
   }
 
-  findAll() {
-    return this.userRepository.find();
+  findAll(query: PaginateQuery) {
+    return paginate(query, this.userRepository, {
+      sortableColumns: ['id', 'name'],
+      nullSort: 'last',
+      defaultSortBy: [['id', 'DESC']],
+      searchableColumns: ['name', 'email'],
+      filterableColumns: {
+        name: [FilterOperator.EQ],
+        email: [FilterOperator.EQ],
+      },
+    });
   }
 
   findOne(id: string) {
-    return this.userRepository.findOneBy({ id });
+    return this.userRepository.findOneByOrFail({ id });
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return this.userRepository.update(id, updateUserDto);
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    await this.userRepository.update(id, updateUserDto);
+    return this.findOne(id);
   }
 
   async remove(id: string) {

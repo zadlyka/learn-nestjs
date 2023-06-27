@@ -10,6 +10,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Paginate, PaginateQuery } from 'nestjs-paginate';
 
 @Controller('user')
 export class UserController {
@@ -21,8 +22,8 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  findAll(@Paginate() query: PaginateQuery) {
+    return this.userService.findAll(query);
   }
 
   @Get(':id')
