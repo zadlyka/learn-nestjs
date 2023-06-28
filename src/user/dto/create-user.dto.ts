@@ -4,15 +4,15 @@ export class CreateUserDto {
   @IsNotEmpty()
   @MaxLength(64)
   @IsString()
-  name: string;
+  readonly name: string;
 
   @IsNotEmpty()
   @MaxLength(64)
   @IsEmail()
-  email: string;
+  readonly email: string;
 
   @IsNotEmpty()
   @MaxLength(8)
   @IsString()
-  password: string;
+  readonly password: string;
 }

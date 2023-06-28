@@ -6,7 +6,9 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import typeorm from './config/typeorm';
 import { WrapInterceptor } from './interceptor/wrap.interceptor';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { AuthModule } from './auth/auth.module';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [typeorm] }),
@@ -17,9 +19,14 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
         configService.get('typeorm'),
     }),
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
     {
       provide: APP_INTERCEPTOR,
       useClass: WrapInterceptor,

@@ -9,7 +9,8 @@ import { FilterOperator, PaginateQuery, paginate } from 'nestjs-paginate';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -33,6 +34,10 @@ export class UserService {
 
   findOne(id: string) {
     return this.userRepository.findOneByOrFail({ id });
+  }
+
+  findOneByUsername(username: string) {
+    return this.userRepository.findOneByOrFail([{ email: username }]);
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
