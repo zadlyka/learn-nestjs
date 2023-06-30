@@ -1,25 +1,36 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
-import typeorm from './config/typeorm';
+import { JwtAuthGuard } from './authentication/auth/guards/jwt-auth.guard';
+import { AuthenticationModule } from './authentication/authentication.module';
+import AppConfig from './config/app.config';
 import { WrapInterceptor } from './interceptor/wrap.interceptor';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { PermissionsGuard } from './authentication/auth/guards/permissions.guard';
+
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, load: [typeorm] }),
+    ConfigModule.forRoot({ isGlobal: true, load: [AppConfig] }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) =>
-        configService.get('typeorm'),
+        configService.get('database'),
     }),
-    UserModule,
+    AuthenticationModule,
   ],
   controllers: [AppController],
   providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionsGuard,
+    },
     {
       provide: APP_INTERCEPTOR,
       useClass: WrapInterceptor,

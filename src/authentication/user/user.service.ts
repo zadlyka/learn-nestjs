@@ -1,3 +1,4 @@
+import * as bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -9,11 +10,16 @@ import { FilterOperator, PaginateQuery, paginate } from 'nestjs-paginate';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const user = this.userRepository.create(createUserDto);
+    const { password, ...attrsUser } = createUserDto;
+    const hash = password
+      ? await bcrypt.hash(password, 10)
+      : await bcrypt.hash('not-set', 10);
+    const user = this.userRepository.create({ ...attrsUser, password: hash });
     await this.userRepository.save(user);
     return this.findOne(user.id);
   }
@@ -33,6 +39,10 @@ export class UserService {
 
   findOne(id: string) {
     return this.userRepository.findOneByOrFail({ id });
+  }
+
+  findOneByUsername(username: string) {
+    return this.userRepository.findOneByOrFail([{ email: username }]);
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
