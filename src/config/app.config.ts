@@ -4,6 +4,7 @@ dotenvConfig({ path: '.env' });
 
 const AppConfig = () => {
   return {
+    allowUrls: process.env.ALLOW_URLS?.split(',') || ['http://localhost:3000'],
     database: {
       type: 'postgres' as const,
       host: `${process.env.DB_HOST}` || 'localhost',
