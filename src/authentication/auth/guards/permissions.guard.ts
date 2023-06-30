@@ -25,7 +25,12 @@ export class PermissionsGuard implements CanActivate {
     );
   }
 
-  canActivate(context: ExecutionContext): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected async isOwner(user: User, id: string) {
+    return false;
+  }
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredPermissions = this.reflector.getAllAndOverride<Permission>(
       PERMISSION_KEY,
       [context.getHandler(), context.getClass()],
@@ -35,7 +40,10 @@ export class PermissionsGuard implements CanActivate {
       return true;
     }
 
-    const { user } = context.switchToHttp().getRequest();
+    const { user, params } = context.switchToHttp().getRequest();
+    const { id = '' } = params;
+    const isOwner = await this.isOwner(user, id);
+    if (isOwner) return true;
     return this.evaluatePermission(user, requiredPermissions);
   }
 }
