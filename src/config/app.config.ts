@@ -6,6 +6,7 @@ const AppConfig = () => {
   return {
     allowUrls: process.env.ALLOW_URLS?.split(',') || ['http://localhost:3000'],
     cache: {
+      host: process.env.CACHE_HOST || 'localhost',
       port: parseInt(process.env.CACHE_PORT, 10) || 6379,
       ttl: parseInt(process.env.CACHE_TTL) || 600,
       url: process.env.CACHE_URL || 'redis://127.0.0.1:6379/0',
