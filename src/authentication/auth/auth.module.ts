@@ -1,13 +1,15 @@
+import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { CommonModule } from 'src/common/common.module';
+import { AuthProcessor } from 'src/common/processors/log.processor';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
-import { CommonModule } from '../../common/common.module';
 
 @Module({
   imports: [
@@ -23,8 +25,11 @@ import { CommonModule } from '../../common/common.module';
         },
       }),
     }),
+    BullModule.registerQueue({
+      name: 'log',
+    }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, AuthProcessor],
 })
 export class AuthModule {}

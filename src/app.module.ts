@@ -13,6 +13,7 @@ import { PermissionsGuard } from './authentication/auth/guards/permissions.guard
 import { CommonModule } from './common/common.module';
 import { redisStore } from 'cache-manager-redis-store';
 import { ScheduleModule } from '@nestjs/schedule';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
@@ -33,6 +34,16 @@ import { ScheduleModule } from '@nestjs/schedule';
         ttl: configService.get('cache.ttl'),
       }),
       isGlobal: true,
+    }),
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        redis: {
+          host: configService.get('cache.host'),
+          port: configService.get('cache.port'),
+        },
+      }),
     }),
     ScheduleModule.forRoot(),
     AuthenticationModule,
