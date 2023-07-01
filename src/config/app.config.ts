@@ -5,6 +5,11 @@ dotenvConfig({ path: '.env' });
 const AppConfig = () => {
   return {
     allowUrls: process.env.ALLOW_URLS?.split(',') || ['http://localhost:3000'],
+    cache: {
+      port: parseInt(process.env.CACHE_PORT, 10) || 6379,
+      ttl: parseInt(process.env.CACHE_TTL) || 600,
+      url: process.env.CACHE_URL || 'redis://127.0.0.1:6379/0',
+    },
     database: {
       type: 'postgres' as const,
       host: `${process.env.DB_HOST}` || 'localhost',
