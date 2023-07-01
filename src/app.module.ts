@@ -9,6 +9,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import AppConfig from './config/app.config';
 import { WrapInterceptor } from './interceptor/wrap.interceptor';
 import { PermissionsGuard } from './authentication/auth/guards/permissions.guard';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PermissionsGuard } from './authentication/auth/guards/permissions.guard
         configService.get('database'),
     }),
     AuthenticationModule,
+    CommonModule,
   ],
   controllers: [AppController],
   providers: [

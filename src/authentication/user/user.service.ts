@@ -1,11 +1,11 @@
 import * as bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { PaginateQuery, paginate, FilterOperator } from 'nestjs-paginate';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
-import { FilterOperator, PaginateQuery, paginate } from 'nestjs-paginate';
 
 @Injectable()
 export class UserService {
