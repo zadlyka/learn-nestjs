@@ -12,6 +12,7 @@ import { WrapInterceptor } from './interceptor/wrap.interceptor';
 import { PermissionsGuard } from './authentication/auth/guards/permissions.guard';
 import { CommonModule } from './common/common.module';
 import { redisStore } from 'cache-manager-redis-store';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { redisStore } from 'cache-manager-redis-store';
       }),
       isGlobal: true,
     }),
+    ScheduleModule.forRoot(),
     AuthenticationModule,
     CommonModule,
   ],
