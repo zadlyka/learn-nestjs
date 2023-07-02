@@ -1,5 +1,5 @@
-import { CacheStore, Module } from '@nestjs/common';
-import { CacheModule } from '@nestjs/cache-manager';
+import { Module } from '@nestjs/common';
+import { CacheModule, CacheStore } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
