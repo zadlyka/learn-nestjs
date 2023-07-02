@@ -14,6 +14,7 @@ import { CommonModule } from './common/common.module';
 import { redisStore } from 'cache-manager-redis-store';
 import { ScheduleModule } from '@nestjs/schedule';
 import { BullModule } from '@nestjs/bull';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -45,6 +46,10 @@ import { BullModule } from '@nestjs/bull';
         },
       }),
     }),
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 10,
+    }),
     ScheduleModule.forRoot(),
     AuthenticationModule,
     CommonModule,
@@ -62,6 +67,10 @@ import { BullModule } from '@nestjs/bull';
     {
       provide: APP_INTERCEPTOR,
       useClass: WrapInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
     AppService,
   ],
