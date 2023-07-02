@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { WithoutJwt } from './decorators/without-jwt.decorator';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
+import { SkipThrottle } from '@nestjs/throttler';
 
 @Controller('auth')
 export class AuthController {
@@ -14,6 +15,7 @@ export class AuthController {
 
   @WithoutJwt()
   @UseGuards(AuthGuard('local'))
+  @SkipThrottle()
   @Post()
   async signIn(@Request() req) {
     const data = req.user;
