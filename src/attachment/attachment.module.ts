@@ -10,5 +10,6 @@ import { CommonModule } from 'src/common/common.module';
   imports: [TypeOrmModule.forFeature([Attachment]), CommonModule],
   controllers: [AttachmentController],
   providers: [AttachmentService, FileService],
+  exports: [AttachmentService],
 })
 export class AttachmentModule {}
