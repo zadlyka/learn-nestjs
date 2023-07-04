@@ -8,6 +8,8 @@ import { Cache } from 'cache-manager';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { AttachmentService } from 'src/attachment/services/attachment.service';
+import { CustomLogger } from 'src/common/services/custom-logger.service';
 
 const key = 'user';
 @Injectable()
@@ -17,14 +19,40 @@ export class UserService {
     private readonly userRepository: Repository<User>,
     @Inject(CACHE_MANAGER)
     private cacheManager: Cache,
-  ) {}
+    private attachmentService: AttachmentService,
+    private customLogger: CustomLogger,
+  ) {
+    this.customLogger.setContext(UserService.name);
+  }
 
   async create(createUserDto: CreateUserDto) {
-    const { password, ...attrsUser } = createUserDto;
+    const { password, profileId, identityCardId, ...attrsUser } = createUserDto;
     const hash = password
       ? await bcrypt.hash(password, 10)
       : await bcrypt.hash('not-set', 10);
-    const user = this.userRepository.create({ ...attrsUser, password: hash });
+
+    if (profileId) {
+      try {
+        await this.processAttachment(profileId);
+      } catch (error) {
+        this.customLogger.error(error);
+      }
+    }
+
+    if (identityCardId) {
+      try {
+        await this.processAttachment(identityCardId);
+      } catch (error) {
+        this.customLogger.error(error);
+      }
+    }
+
+    const user = this.userRepository.create({
+      ...attrsUser,
+      password: hash,
+      profileId,
+      identityCardId,
+    });
     await this.userRepository.save(user);
     await this.cacheManager.del(key);
     return this.findOne(user.id);
@@ -43,6 +71,7 @@ export class UserService {
         name: [FilterOperator.EQ],
         email: [FilterOperator.EQ],
       },
+      relations: ['profile', 'identityCard'],
     });
     await this.cacheManager.set(key, item);
     return item;
@@ -57,6 +86,23 @@ export class UserService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
+    const { profileId, identityCardId } = updateUserDto;
+    if (profileId) {
+      try {
+        await this.processAttachment(profileId);
+      } catch (error) {
+        this.customLogger.error(error);
+      }
+    }
+
+    if (identityCardId) {
+      try {
+        await this.processAttachment(identityCardId);
+      } catch (error) {
+        this.customLogger.error(error);
+      }
+    }
+
     await this.userRepository.update(id, updateUserDto);
     await this.cacheManager.del(key);
     return this.findOne(id);
@@ -66,5 +112,9 @@ export class UserService {
     const user = await this.findOne(id);
     await this.cacheManager.del(key);
     return this.userRepository.softRemove(user);
+  }
+
+  private processAttachment(attachmentId: string) {
+    return this.attachmentService.move(attachmentId);
   }
 }

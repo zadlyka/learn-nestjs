@@ -5,6 +5,12 @@ dotenvConfig({ path: '.env' });
 const AppConfig = () => {
   return {
     allowUrls: process.env.ALLOW_URLS?.split(',') || ['http://localhost:3000'],
+    aws: {
+      bucket: process.env.AWS_S3_BUCKET,
+      region: process.env.AWS_S3_REGION,
+      accessKeyId: process.env.AWS_S3_ACCESS_KEY,
+      secretAccessKey: process.env.AWS_S3_SECRET_KEY,
+    },
     cache: {
       host: process.env.CACHE_HOST || 'localhost',
       port: parseInt(process.env.CACHE_PORT, 10) || 6379,

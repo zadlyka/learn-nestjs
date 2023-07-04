@@ -15,6 +15,7 @@ import { redisStore } from 'cache-manager-redis-store';
 import { ScheduleModule } from '@nestjs/schedule';
 import { BullModule } from '@nestjs/bull';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { AttachmentModule } from './attachment/attachment.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     ScheduleModule.forRoot(),
     AuthenticationModule,
     CommonModule,
+    AttachmentModule,
   ],
   controllers: [AppController],
   providers: [

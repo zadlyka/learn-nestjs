@@ -3,6 +3,7 @@ import {
   IsEmail,
   IsNotEmpty,
   IsString,
+  IsUUID,
   MaxLength,
   ValidateNested,
 } from 'class-validator';
@@ -23,6 +24,14 @@ export class CreateUserDto {
   @MaxLength(8)
   @IsString()
   readonly password: string;
+
+  @IsUUID()
+  @IsString()
+  readonly profileId?: string;
+
+  @IsUUID()
+  @IsString()
+  readonly identityCardId?: string;
 
   @Type(() => Role)
   @ValidateNested()
