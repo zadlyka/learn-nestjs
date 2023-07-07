@@ -41,7 +41,9 @@ describe('UserController', () => {
             ),
             remove: jest
               .fn()
-              .mockImplementation((id: string) => Promise.resolve({ id })),
+              .mockImplementation((id: string) =>
+                Promise.resolve({ id, ...oneUser }),
+              ),
             update: jest
               .fn()
               .mockImplementation((id: string, updateUserDto: UpdateUserDto) =>
@@ -110,6 +112,7 @@ describe('UserController', () => {
     it('should return that it deleted a user', async () => {
       await expect(controller.remove('uuid')).resolves.toEqual({
         id: 'uuid',
+        ...oneUser,
       });
     });
   });
