@@ -8,8 +8,8 @@ import { Cache } from 'cache-manager';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { AttachmentService } from 'src/attachment/services/attachment.service';
-import { CustomLogger } from 'src/common/services/custom-logger.service';
+import { AttachmentService } from '../../attachment/services/attachment.service';
+import { CustomLogger } from '../../common/services/custom-logger.service';
 
 const key = 'user';
 @Injectable()

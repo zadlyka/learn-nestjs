@@ -11,8 +11,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Role } from 'src/authentication/role/entities/role.entity';
-import { Attachment } from 'src/attachment/entities/attachment.entity';
+import { Role } from '../../role/entities/role.entity';
+import { Attachment } from '../../../attachment/entities/attachment.entity';
 
 @Entity()
 export class User {
