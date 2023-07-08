@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { SignInDto } from './dto/sign-in.dto';
-import { CustomLogger } from 'src/common/services/custom-logger.service';
+import { CustomLogger } from '../../common/services/custom-logger.service';
 
 @Injectable()
 export class AuthService {

@@ -11,8 +11,8 @@ export default class UserSeeder implements Seeder {
   ): Promise<any> {
     const userRepository = dataSource.getRepository(User);
     await userRepository.save({
-      email: 'ggg@gmail.com',
-      name: 'sfvs',
+      email: 'admin@mail.com',
+      name: 'admin',
       password: await bcrypt.hash('not-set', 10),
       roles: [
         {

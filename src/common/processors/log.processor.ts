@@ -10,7 +10,7 @@ export class AuthProcessor {
   @Process('transcode')
   async transcode(job: Job) {
     this.customLogger.debug('Start transcoding...');
-    this.customLogger.debug(job.data);
+    //this.customLogger.debug(job.data);
     this.customLogger.debug('Transcoding completed');
   }
 }

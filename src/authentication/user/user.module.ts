@@ -4,8 +4,8 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { User } from './entities/user.entity';
 import { UserGateway } from './gateways/user.gateway';
-import { AttachmentModule } from 'src/attachment/attachment.module';
-import { CommonModule } from 'src/common/common.module';
+import { AttachmentModule } from '../../attachment/attachment.module';
+import { CommonModule } from '../../common/common.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), AttachmentModule, CommonModule],

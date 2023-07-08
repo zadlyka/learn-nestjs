@@ -4,7 +4,7 @@ import { AttachmentService } from './services/attachment.service';
 import { AttachmentController } from './attachment.controller';
 import { Attachment } from './entities/attachment.entity';
 import { FileService } from './services/file.service';
-import { CommonModule } from 'src/common/common.module';
+import { CommonModule } from '../common/common.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Attachment]), CommonModule],

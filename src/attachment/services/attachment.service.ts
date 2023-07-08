@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateAttachmentDto } from '../dto/create-attachment.dto';
 import { UpdateAttachmentDto } from '../dto/update-attachment.dto';
 import { Attachment } from '../entities/attachment.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PaginateQuery, paginate, FilterOperator } from 'nestjs-paginate';
 import { FileService } from './file.service';
